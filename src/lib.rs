@@ -1,3 +1,5 @@
+#![allow(unused_imports, dead_code)]
+
 use tauri::{
     plugin::{Builder, TauriPlugin},
     Manager, Runtime,
