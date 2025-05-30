@@ -99,6 +99,26 @@ impl<R: Runtime> UserInput<R> {
                     }
                     drop(channels);
                 }
+                println!("event: {:?}", event2);
+                // Ignore when: event_type: KeyRelease(Unknown(179)), platform_code: 179
+                // if event2.event_type == EventType::KeyRelease(rdev::Key::Unknown(179)) {
+                //     println!("Ignoring event: {:?}", event2);
+                //     return None;
+                // }
+                // Ignore all [KeyPress(Key),KeyRelease(Key)] events to bubble up
+                if matches!(
+                    event2.event_type,
+                    EventType::KeyPress(_) | EventType::KeyRelease(_)
+                )
+                {
+                    println!("Ignoring event: {:?}", event2.event_type);
+                    return None;
+                }
+                // // Ignore all events to bubble up, only allow Escape key to bubble up
+                // if event2.event_type != EventType::KeyRelease(rdev::Key::Escape) {
+                //     println!("Ignoring event: {:?}", event2.event_type);
+                //     return None;
+                // }
                 Some(event2)
             }) {
                 println!("Error: {:?}", error)
